@@ -1,37 +1,14 @@
-## Welcome to GitHub Pages
+このドキュメントは、CLUSTERPRO において意図しないフェイルオーバ・フェイルバックを避けるために、クラスタ機能を省略し レプリケーション機能のみを使用するための設定方法を説明する。
 
-You can use the [editor on GitHub](https://github.com/EXPRESSCLUSTER/Replication-without-Failover/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+## 基本方針
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+2ノードクラスタを構成し以下の設定を行う。
+- フェイルオーバーグループ group#1 を作成し、ミラーディスクリソース md のみを持たせる。
+- 如何なる障害が検出されても 手動フェイルオーバー となるようにする。
+  - サーバーグループを作成し、手動フェイルオーバーに設定する。
+- 常に手動フェイルオーバーなので、NP状態で両系活性状態にならない。このため NP解決は行わない。
 
-### Markdown
+## 追加方針
+- 設定ミスの可能性を下げるため、node#2 でのみ稼働する「完全」排他属性のフェイルオーバーグループ group#2 を作成する。 
+  - これにより、node#2 で md を活性させる操作は、「group#2 を停止後、node#2 で group#1 を起動」という二段階操作になり、安全性が向上する
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/EXPRESSCLUSTER/Replication-without-Failover/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
